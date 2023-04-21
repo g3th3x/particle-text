@@ -7,9 +7,10 @@ export class Effect {
     this.cvsHeight = cvsHeight;
     this.textX = this.cvsWidth / 2;
     this.textY = this.cvsHeight / 2;
-    this.fontSize = 100;
-    this.lineHeight = this.fontSize * 0.9;
-    this.textMaxWidth = this.cvsWidth * 0.4;
+    this.fontSize = 120;
+    this.lineHeight = this.fontSize * 1.2;
+    this.textMaxWidth = this.cvsWidth * 0.5;
+    this.verticalOffset = 10;
     this.inputText = document.querySelector("input");
     this.inputText.addEventListener("keyup", (e) => {
       if (e.key !== " ") {
@@ -19,16 +20,15 @@ export class Effect {
     });
     // Particle text
     this.particles = [];
-    this.gap = 5;
+    this.gap = 3;
     this.mouse = {
-      radius: 20000,
+      radius: 15000,
       x: 0,
       y: 0,
     };
     window.addEventListener("mousemove", (e) => {
       this.mouse.x = e.x;
       this.mouse.y = e.y;
-      //   console.log(this.mouse.x, this.mouse.y);
     });
   }
   textWrapper(text) {
@@ -45,14 +45,12 @@ export class Effect {
     gradient.addColorStop(0.8, "#ff00d1");
     gradient.addColorStop(0.9, "#001fff");
     this.ctx.fillStyle = gradient;
-
     this.ctx.textAlign = "center";
     this.ctx.textBaseline = "middle";
-
     this.ctx.lineWidth = 3;
     // this.ctx.strokeStyle = "#ee340c";
     this.ctx.strokeStyle = "#f4f3bb";
-    this.ctx.font = this.fontSize + "px sans-serif";
+    this.ctx.font = `${this.fontSize}px Sigmar`;
 
     // Break multiline text
     let line = "";
@@ -72,7 +70,7 @@ export class Effect {
     });
 
     let textHeight = this.lineHeight * lineCounter;
-    this.textY = this.cvsHeight / 2 - textHeight / 2;
+    this.textY = this.cvsHeight / 2 - textHeight / 2 + this.verticalOffset;
 
     linesArray.forEach((el, index) => {
       this.ctx.fillText(el, this.textX, this.textY + index * this.lineHeight);
@@ -99,18 +97,22 @@ export class Effect {
           const green = pixels[index + 1];
           const blue = pixels[index + 2];
           const color = `rgd(${red},${green},${blue})`;
-          //   console.log(color);
           this.particles.push(new Particle(this, x, y, color));
         }
       }
     }
-    // console.log(pixels);
-    // console.log(this.particles);
   }
   render() {
     this.particles.forEach((particle) => {
       particle.update();
       particle.draw();
     });
+  }
+  resize(width, height) {
+    this.cvsWidth = width;
+    this.cvsHeight = height;
+    this.textX = this.cvsWidth / 2;
+    this.textY = this.cvsHeight / 2;
+    this.textMaxWidth = this.cvsWidth * 0.5;
   }
 }
