@@ -1,5 +1,4 @@
 import { Effect } from "./src/Effect.js";
-import { Particle } from "./src/Particle.js";
 
 window.addEventListener("load", () => {
   const cvs = document.querySelector("canvas");
@@ -9,6 +8,14 @@ window.addEventListener("load", () => {
   ctx.imageSmoothingEnabled = false;
 
   const effect = new Effect(ctx, cvs.width, cvs.height);
-  effect.textWrapper("DEBUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG!!!!");
-  //  console.log(effect);
+  effect.textWrapper("TYPE YOUR TEXT IN THE TEXT INPUT");
+  effect.render();
+
+  function animate() {
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    effect.render();
+    requestAnimationFrame(animate);
+    // console.log("animation");
+  }
+  animate();
 });
